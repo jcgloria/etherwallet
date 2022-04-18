@@ -7,22 +7,21 @@ const words = JSON.parse(
     )
 );
 
-function convertBufferToBinaryString(buf) {
-    let result = [];
-    for (let i = 0; i < buf.length; i++) {
-        result.unshift(buf[i].toString(2).padStart(8, "0"));
-    }
-    return result.join("");
+function convertBufferToBinaryString(buf){
+const hex2bin = (data) => data.split('').map(i => 
+    parseInt(i, 16).toString(2).padStart(4, '0')).join('');
+    let hex = buf.toString('hex')
+    return hex2bin(hex)
 }
 
-//Generates an array of mnemonic words based on a 128-bit entropy.
-export function generateMnemonic() {
+//Generates an array of mnemonic words based on a random entropy.
+//Valid entropy sizes: 128, 160, 192, 224, 256
+export function generateMnemonic(ent) {
     //Obtain seed of ENT bits. 128 <= ENT <=256 && ENT % 32 = 0.
-    const bitLength = 128
-    const initialSeed = randomBytes(bitLength / 8)
+    const initialSeed = randomBytes(ent / 8)
 
     //Generate checksum by taking the first ENT/32 bits of its SHA256 hash. 
-    const cs = bitLength / 32
+    const cs = ent / 32
     const hash = createHash('sha256').update(initialSeed).digest()
     const checksum = convertBufferToBinaryString(hash).slice(0, cs)
 
@@ -30,7 +29,7 @@ export function generateMnemonic() {
     const seed = convertBufferToBinaryString(initialSeed) + checksum
 
     //Calculate number of words for mnemonic. 
-    const ms = (bitLength + cs) / 11
+    const ms = (ent + cs) / 11
 
     //Split seed into 11 bit chunks to generate the required number of mnemonic words. Map the index with the word list.
     let chunks = []
