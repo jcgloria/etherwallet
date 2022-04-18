@@ -7,9 +7,9 @@ const words = JSON.parse(
     )
 );
 
-function convertBufferToBinaryString(buf){
-const hex2bin = (data) => data.split('').map(i => 
-    parseInt(i, 16).toString(2).padStart(4, '0')).join('');
+function convertBufferToBinaryString(buf) {
+    const hex2bin = (data) => data.split('').map(i =>
+        parseInt(i, 16).toString(2).padStart(4, '0')).join('');
     let hex = buf.toString('hex')
     return hex2bin(hex)
 }
@@ -40,7 +40,7 @@ export function generateMnemonic(ent) {
     return chunks
 }
 
-export function readMnemonic(sentence){
+export function readMnemonic(sentence) {
     //Run pbkf2 algorithm with parameters defined in bips39 spec. No passphrase is used.
     const key = pbkdf2Sync(sentence, 'mnemonic', 2048, 64, 'sha512')
     return key.toString('hex')
