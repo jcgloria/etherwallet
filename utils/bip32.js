@@ -20,10 +20,10 @@ function generateMasterKey(seed){
     const publicKey = generatePublicKeyFromPrivateKeyData(privateKey)
     const yString = convertBufferToBinaryString(Buffer.from(publicKey.y, 'hex'))
     let data_pub;
-    if(findParity(yString)){
-        data_pub = Buffer.concat([Buffer.from('02', 'hex'), Buffer.from(publicKey.x, 'hex')])
-    }else{
+    if(yString.slice(-1) == '1'){
         data_pub = Buffer.concat([Buffer.from('03', 'hex'), Buffer.from(publicKey.x, 'hex')])
+    }else{
+        data_pub = Buffer.concat([Buffer.from('02', 'hex'), Buffer.from(publicKey.x, 'hex')])
     }
     const data_priv = Buffer.concat([Buffer.alloc(1),Il])
     const raw_priv = Buffer.concat([version_priv,depth,fp,child,Ir,data_priv])
