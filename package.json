@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@enumatech/secp256k1-js": "^1.0.0",
     "bs58": "^5.0.0"
   }
 }
