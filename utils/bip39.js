@@ -1,5 +1,6 @@
 import { randomBytes, createHash, pbkdf2Sync } from "crypto"
 import { readFile } from 'fs/promises';
+import { convertBufferToBinaryString } from './general'
 
 const words = JSON.parse(
     await readFile(
@@ -7,19 +8,12 @@ const words = JSON.parse(
     )
 );
 
-function convertBufferToBinaryString(buf) {
-    const hex2bin = (data) => data.split('').map(i =>
-        parseInt(i, 16).toString(2).padStart(4, '0')).join('');
-    let hex = buf.toString('hex')
-    return hex2bin(hex)
-}
-
 //Generates an array of mnemonic words based on a random entropy.
 //Valid entropy sizes: 128, 160, 192, 224, 256
 export function generateMnemonic(ent) {
     //Obtain seed of ENT bits. 128 <= ENT <=256 && ENT % 32 = 0.
     const initialSeed = randomBytes(ent / 8)
-
+    
     //Generate checksum by taking the first ENT/32 bits of its SHA256 hash. 
     const cs = ent / 32
     const hash = createHash('sha256').update(initialSeed).digest()
