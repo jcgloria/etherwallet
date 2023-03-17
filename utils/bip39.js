@@ -1,6 +1,6 @@
 import { randomBytes, createHash, pbkdf2Sync } from "crypto"
 import { readFile } from 'fs/promises';
-import { convertBufferToBinaryString } from './general'
+import { convertBufferToBinaryString } from './general.js'
 
 const words = JSON.parse(
     await readFile(
